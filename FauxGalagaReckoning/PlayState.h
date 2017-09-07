@@ -6,7 +6,7 @@
 #include "PauseState.h"
 
 const int NUM_BCKGRND = 2;
-const int NUM_TXT = 3;
+const int NUM_TXT = 5;
 const int NUM_FONT = 1;
 const int NUM_GAMEART = 6;
 
@@ -15,7 +15,7 @@ class PlayState : public State
 private:
 	static PlayState ActivePlayState;
 	SDL_Texture **background,**gameArt, **gameText;
-	int BG1Begin, BG2Begin;
+	int BG1Begin, BG2Begin, gameScore, gameLives;
 	TTF_Font** usedFonts;
 	SDL_Surface** message;
 public:

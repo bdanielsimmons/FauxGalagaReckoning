@@ -5,6 +5,8 @@ PlayState PlayState::ActivePlayState;
 Player person((SCREEN_WIDTH - PLAYER_WIDTH) / 2, SCREEN_HEIGHT - PLAYER_HEIGHT);
 
 void PlayState::Init(StateManager* game) {
+	gameScore = 0;
+	gameLives = 3;
 	usedFonts = new TTF_Font*[NUM_FONT];
 	usedFonts[ARCADE] = TTF_OpenFont("arcade.ttf", ARCADE_FONTSZ);
 	SDL_Color gameTextColor = { 255,255,255,255 };
@@ -12,7 +14,9 @@ void PlayState::Init(StateManager* game) {
 	message = new SDL_Surface*[NUM_TXT];
 	message[HEALTH] = TTF_RenderText_Solid(usedFonts[ARCADE], "HEALTH", gameTextColor);
 	message[SCORE] = TTF_RenderText_Solid(usedFonts[ARCADE], "SCORE", gameTextColor);
+	message[SCORE_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameScore).c_str(), gameTextColor);
 	message[LIVES] = TTF_RenderText_Solid(usedFonts[ARCADE], "LIVES", gameTextColor);
+	message[LIVES_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameLives).c_str(), gameTextColor);
 
 	SDL_Texture** bg = new SDL_Texture*[NUM_BCKGRND];
 	//Insert failsafe before assigning background!
@@ -28,7 +32,9 @@ void PlayState::Init(StateManager* game) {
 	background[SCROLL2] = SDL_CreateTextureFromSurface(game->SMRender, bgcolor);
 	gameText[HEALTH] = SDL_CreateTextureFromSurface(game->SMRender, message[HEALTH]);
 	gameText[SCORE] = SDL_CreateTextureFromSurface(game->SMRender, message[SCORE]);
+	gameText[SCORE_TEXT] = SDL_CreateTextureFromSurface(game->SMRender, message[SCORE_TEXT]);
 	gameText[LIVES] = SDL_CreateTextureFromSurface(game->SMRender, message[LIVES]);
+	gameText[LIVES_TEXT] = SDL_CreateTextureFromSurface(game->SMRender, message[LIVES_TEXT]);
 	SDL_FreeSurface(bgcolor);
 	SDL_FreeSurface(message[HEALTH]);
 	SDL_FreeSurface(message[SCORE]);
@@ -90,7 +96,9 @@ void PlayState::Draw(StateManager* game) {
 	renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
 	renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);
 	renderTexture(gameText[SCORE], game->SMRender, 15, ARCADE_FONTSZ);
+	renderTexture(gameText[SCORE_TEXT], game->SMRender, 15, ARCADE_FONTSZ * 2);
 	renderTexture(gameText[LIVES], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ);
+	renderTexture(gameText[LIVES_TEXT], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ * 2);
 	SDL_RenderPresent(game->SMRender);
 	SDL_Delay(1);
 }
