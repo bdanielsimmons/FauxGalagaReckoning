@@ -30,9 +30,6 @@ void PauseState::Update(StateManager* game) {
 			game->PopState();
 		}
 	}
-	//if (keys[SDL_SCANCODE_ESCAPE]) {
-	//	game->PopState() ;
-	//}
 }
 
 void PauseState::Draw(StateManager* game) {
@@ -40,22 +37,3 @@ void PauseState::Draw(StateManager* game) {
 	renderTexture(background, game->SMRender, 0, 0);
 	SDL_RenderPresent(game->SMRender);
 }
-
-//void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y) {
-//	//Setup the destination rectangle to be at the position we want
-//	SDL_Rect dst;
-//	dst.x = x;
-//	dst.y = y;
-//	//Query the texture to get its width and height to use
-//	SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
-//	SDL_RenderCopy(ren, tex, NULL, &dst);
-//}
-//
-//SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren) {
-//	//Initialize to nullptr to avoid dangling pointer issues
-//	SDL_Texture *texture = nullptr;
-//	SDL_Surface *loadedImage = SDL_LoadBMP(file.c_str());
-//	texture = SDL_CreateTextureFromSurface(ren, loadedImage);
-//	SDL_FreeSurface(loadedImage);
-//	return texture;
-//}
