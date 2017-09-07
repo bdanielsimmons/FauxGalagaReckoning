@@ -24,30 +24,44 @@ void Player::takeDamage(int dmg) {
 }
 
 void Player::Update(const Uint8* keys) {
-	if (keys[SDL_SCANCODE_UP])	y -= PLAYER_VEL;
-	if (keys[SDL_SCANCODE_DOWN]) y += PLAYER_VEL;
-	if (keys[SDL_SCANCODE_LEFT]) {
-		x -= PLAYER_VEL; 
-		state = PLEFT;
+	if (state == PDAMAGED) {
+		dmgnow = SDL_GetTicks();
 	}
-	if (keys[SDL_SCANCODE_RIGHT]) {
-		x += PLAYER_VEL;
-		state = PRIGHT;
+	if (!dmgpass) {
+		dmgpass = dmgnow;
 	}
-	if (keys[SDL_SCANCODE_SPACE]) {
-		now = SDL_GetTicks();
-		if (now > timepass + 50) {
-			Projectile::createProjectile(x + w/2 - LSR_W/2, y-LSR_H/2, LSR_W, LSR_H);
-			takeDamage(10);
-		}
-		timepass = now;
-	}
-	if (!(keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT])) {
+	std::cout << "TIMENOW -- " << dmgnow << std::endl;
+	std::cout << "TIMEPASS -- " << dmgpass << std::endl;
+	if (state == PDAMAGED && dmgnow > dmgpass + 400) {
 		state = PLAYER;
+	}
+	if (state != PDAMAGED) {
+		dmgpass = dmgnow = 0;
+		if (keys[SDL_SCANCODE_UP])	y -= PLAYER_VEL;
+		if (keys[SDL_SCANCODE_DOWN]) y += PLAYER_VEL;
+		if (keys[SDL_SCANCODE_LEFT]) {
+			x -= PLAYER_VEL;
+			state = PLEFT;
+		}
+		if (keys[SDL_SCANCODE_RIGHT]) {
+			x += PLAYER_VEL;
+			state = PRIGHT;
+		}
+		if (keys[SDL_SCANCODE_SPACE]) {
+			now = SDL_GetTicks();
+			if (now > timepass + 50) {
+				Projectile::createProjectile(x + w / 2 - LSR_W / 2, y - LSR_H / 2, LSR_W, LSR_H);
+				takeDamage(10);
+			}
+			timepass = now;
+		}
+		if (!(keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) && state != PDAMAGED) {
+			state = PLAYER;
+		}
 	}
 
 	if (x < 0) x = 0;
-	if (x >(SCREEN_WIDTH - w)) x = SCREEN_WIDTH - w;
+	if (x > (SCREEN_WIDTH - w)) x = SCREEN_WIDTH - w;
 	if (y < 0) y = 0;
 	if (y > SCREEN_HEIGHT - h) y = SCREEN_HEIGHT - h;
 
