@@ -19,7 +19,6 @@ int main(int, char**) {
 	StateManager game;
 	game.Init(renderer);
 	game.ChangeState(PlayState::Instance());
-	SDL_Event Event;
 	while (game.Running()) {
 		game.Manage();
 		game.Update();

@@ -4,20 +4,25 @@
 #include <SDL.h>
 #include "Constants.h"
 #include "PlayState.h"
-#include <vector>
+#include "Projectile.h"
 
 class Player {
 private:
-	int x, y, w, h;
+	int x, y, w, h, state, now, timepass;
+	int health;
 public:
 	Player(int x, int y, int w = PLAYER_WIDTH, int h = PLAYER_HEIGHT) {
 		this->x = x;
 		this->y = y;
 		this->w = w;
 		this->h = h;
+		health = 100;
+		state = 0;
 	}
 	void Update(const Uint8*);
-	void Draw(SDL_Texture*, SDL_Renderer*);
+	void Draw(SDL_Texture**, SDL_Renderer*);
+	void takeDamage(int);
+	int getHealth();
 	int getX();
 	int getY();
 	int getW();

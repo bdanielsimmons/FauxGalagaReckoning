@@ -3,11 +3,17 @@
 
 #include <SDL.h>
 #include <string>
-const int SCREEN_WIDTH = 600;
-const int SCREEN_HEIGHT = 750;
-const int BG_HEIGHT = 853;
-const int DOT_VEL = 10;
-const int PLAYER_WIDTH = 60;
-const int PLAYER_HEIGHT = 60;
+const int SCREEN_WIDTH = 600,
+SCREEN_HEIGHT = 750,
+BG_HEIGHT = 750,
+PLAYER_VEL = 4,
+PLAYER_WIDTH = 50,
+PLAYER_HEIGHT = 38,
+LSR_W = 9,
+LSR_H = 33,
+LSR_SPEED = 15,
+MAX_HEALTH = 100;
+enum bkgs { SPACE1, SPACE2};
+enum playerArt { PLAYER, PLEFT, PRIGHT, PDAMAGED, LCHARGE, LSHOT };
 
 #endif

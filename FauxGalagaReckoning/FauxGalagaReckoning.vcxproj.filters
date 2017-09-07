@@ -34,6 +34,9 @@
     <Filter Include="Source Files\States\Title%28Unfinished%29">
       <UniqueIdentifier>{93bd877d-7750-49fa-8b7d-bec1c74fb9b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\States\MainGame\Player\Projectile">
+      <UniqueIdentifier>{299e0482-9ac7-4dd4-8e06-6a89d7a4a162}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainGame.cpp">
@@ -50,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="PauseState.cpp">
       <Filter>Source Files\States\Pause%28Unfinished%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\States\MainGame\Player\Projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PauseState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

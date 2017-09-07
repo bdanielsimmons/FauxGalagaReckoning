@@ -154,6 +154,7 @@
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PauseState.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClInclude Include="PauseState.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayState.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
   </ItemGroup>

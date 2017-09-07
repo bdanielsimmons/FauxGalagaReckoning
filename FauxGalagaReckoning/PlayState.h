@@ -2,14 +2,17 @@
 #define PLAYSTATE_H
 
 #include "State.h"
+#include "Player.h"
+#include "PauseState.h"
 
-const int NUM_BCKGRND = 3;
+const int NUM_BCKGRND = 2;
+const int NUM_GAMEART = 6;
 
 class PlayState : public State
 {
 private:
 	static PlayState ActivePlayState;
-	static SDL_Texture** background;
+	SDL_Texture **background,**gameArt;
 	int BG1Begin, BG2Begin;
 public:
 	PlayState() {}
@@ -22,14 +25,7 @@ public:
 	void Manage(StateManager* game) {};
 	void Update(StateManager* game);
 	void Draw(StateManager* game);
-
-	bool occupiedPanel(int, int);
-	bool colliding();
-	bool falling();
-	void emptyLine(int);
-	void clearLine(int);
-	void spawnPiece();
-	void UpdatePiece();
+	void renderHPBar(StateManager* game, int, int, int, int, float, SDL_Color, SDL_Color);
 
 	static PlayState* Instance() {
 		return &ActivePlayState;
