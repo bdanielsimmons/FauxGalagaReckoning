@@ -11,6 +11,7 @@
 
 void renderTexture(SDL_Texture*, SDL_Renderer*, int, int);
 SDL_Texture* loadTexture(const std::string&, SDL_Renderer*);
+bool load_files();
 
 class State;
 

@@ -2,20 +2,38 @@
 
 SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 PlayState PlayState::ActivePlayState;
-Player person((SCREEN_WIDTH-PLAYER_WIDTH)/2, SCREEN_HEIGHT - PLAYER_HEIGHT);
+Player person((SCREEN_WIDTH - PLAYER_WIDTH) / 2, SCREEN_HEIGHT - PLAYER_HEIGHT);
 
 void PlayState::Init(StateManager* game) {
+	usedFonts = new TTF_Font*[NUM_FONT];
+	usedFonts[ARCADE] = TTF_OpenFont("arcade.ttf", ARCADE_FONTSZ);
+	SDL_Color gameTextColor = { 255,255,255,255 };
+
+	message = new SDL_Surface*[NUM_TXT];
+	message[HEALTH] = TTF_RenderText_Solid(usedFonts[ARCADE], "HEALTH", gameTextColor);
+	message[SCORE] = TTF_RenderText_Solid(usedFonts[ARCADE], "SCORE", gameTextColor);
+	message[LIVES] = TTF_RenderText_Solid(usedFonts[ARCADE], "LIVES", gameTextColor);
+
 	SDL_Texture** bg = new SDL_Texture*[NUM_BCKGRND];
 	//Insert failsafe before assigning background!
 	//loadTexture("test.bmp", game->SMRender);
 	SDL_Texture** baseArt = new SDL_Texture*[NUM_GAMEART];
+	SDL_Texture** baseTxt = new SDL_Texture*[NUM_TXT];
 	background = bg;
 	gameArt = baseArt;
+	gameText = baseTxt;
 
 	SDL_Surface* bgcolor = IMG_Load("starBackgroundLarge.png");
-	background[SPACE1] = SDL_CreateTextureFromSurface(game->SMRender, bgcolor); 
-	background[SPACE2] = SDL_CreateTextureFromSurface(game->SMRender, bgcolor);
+	background[SCROLL1] = SDL_CreateTextureFromSurface(game->SMRender, bgcolor);
+	background[SCROLL2] = SDL_CreateTextureFromSurface(game->SMRender, bgcolor);
+	gameText[HEALTH] = SDL_CreateTextureFromSurface(game->SMRender, message[HEALTH]);
+	gameText[SCORE] = SDL_CreateTextureFromSurface(game->SMRender, message[SCORE]);
+	gameText[LIVES] = SDL_CreateTextureFromSurface(game->SMRender, message[LIVES]);
 	SDL_FreeSurface(bgcolor);
+	SDL_FreeSurface(message[HEALTH]);
+	SDL_FreeSurface(message[SCORE]);
+	SDL_FreeSurface(message[LIVES]);
+
 
 	SDL_Surface* spaceship = IMG_Load("player.png");
 	SDL_Surface* shipLeft = IMG_Load("playerLeft.png");
@@ -63,16 +81,18 @@ void PlayState::Update(StateManager* game) {
 
 void PlayState::Draw(StateManager* game) {
 	SDL_RenderClear(game->SMRender);
-	renderTexture(background[SPACE1], game->SMRender, 0, BG1Begin);
-	renderTexture(background[SPACE2], game->SMRender, 0, BG2Begin);
+	renderTexture(background[SCROLL1], game->SMRender, 0, BG1Begin);
+	renderTexture(background[SCROLL2], game->SMRender, 0, BG2Begin);
 	if (BG1Begin >= SCREEN_HEIGHT) BG1Begin = -BG_HEIGHT;
 	if (BG2Begin >= SCREEN_HEIGHT) BG2Begin = -BG_HEIGHT;
-	BG1Begin += 2; BG2Begin += 2;
+	BG1Begin += SCROLL_SPEED; BG2Begin += SCROLL_SPEED;
 	person.Draw(gameArt, game->SMRender);
-	//gameArt
 	renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
+	renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);
+	renderTexture(gameText[SCORE], game->SMRender, 15, ARCADE_FONTSZ);
+	renderTexture(gameText[LIVES], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ);
 	SDL_RenderPresent(game->SMRender);
-	//SDL_Delay(1);
+	SDL_Delay(1);
 }
 
 SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
