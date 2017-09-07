@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Main">
+      <UniqueIdentifier>{7e496fcd-b06c-4001-87d5-72e7a5c3305a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\State Management">
+      <UniqueIdentifier>{a4d6517b-4d9e-44a8-8505-1f5f812ddc63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States">
+      <UniqueIdentifier>{7a91822f-6637-488a-b122-2ffa0ca15d38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\MainGame">
+      <UniqueIdentifier>{adc44a1f-27ac-493b-8332-5553aad65bc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\MainGame\Player">
+      <UniqueIdentifier>{0853c0ed-8799-447b-b5ce-b2431e135167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\Pause%28Unfinished%29">
+      <UniqueIdentifier>{cd41cb8e-f02e-41ff-8de7-f2ae5723dafc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\Title%28Unfinished%29">
+      <UniqueIdentifier>{93bd877d-7750-49fa-8b7d-bec1c74fb9b8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainGame.cpp">
+      <Filter>Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
+      <Filter>Source Files\State Management</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayState.cpp">
+      <Filter>Source Files\States\MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\States\MainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseState.cpp">
+      <Filter>Source Files\States\Pause%28Unfinished%29</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="spaceship.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="spaceship.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="test.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="space.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="space2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="space11.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="space12.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
