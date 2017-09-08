@@ -8,13 +8,13 @@
 const int NUM_BCKGRND = 2;
 const int NUM_TXT = 5;
 const int NUM_FONT = 1;
-const int NUM_GAMEART = 6;
+const int NUM_PLYRART = 7;
 
 class PlayState : public State
 {
 private:
 	static PlayState ActivePlayState;
-	SDL_Texture **background,**gameArt, **gameText;
+	SDL_Texture **background,**playerArt, **gameText;
 	int BG1Begin, BG2Begin, gameLives;
 	static int gameScore;
 	TTF_Font** usedFonts;

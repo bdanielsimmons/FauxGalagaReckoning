@@ -22,10 +22,10 @@ void PlayState::Init(StateManager* game) {
 	SDL_Texture** bg = new SDL_Texture*[NUM_BCKGRND];
 	//Insert failsafe before assigning background!
 	//loadTexture("test.bmp", game->SMRender);
-	SDL_Texture** baseArt = new SDL_Texture*[NUM_GAMEART];
+	SDL_Texture** baseArt = new SDL_Texture*[NUM_PLYRART];
 	SDL_Texture** baseTxt = new SDL_Texture*[NUM_TXT];
 	background = bg;
-	gameArt = baseArt;
+	playerArt = baseArt;
 	gameText = baseTxt;
 
 	SDL_Surface* bgcolor = IMG_Load("starBackgroundLarge.png");
@@ -50,12 +50,14 @@ void PlayState::Init(StateManager* game) {
 	SDL_Surface* shipDam = IMG_Load("playerDamaged.png");
 	SDL_Surface* laserCharge = IMG_Load("laserGreenShot.png");
 	SDL_Surface* laserShot = IMG_Load("laserGreen.png");
-	gameArt[PLAYER] = SDL_CreateTextureFromSurface(game->SMRender, spaceship);
-	gameArt[PLEFT] = SDL_CreateTextureFromSurface(game->SMRender, shipLeft);
-	gameArt[PRIGHT] = SDL_CreateTextureFromSurface(game->SMRender, shipRight);
-	gameArt[PDAMAGED] = SDL_CreateTextureFromSurface(game->SMRender, shipDam);
-	gameArt[LSHOT] = SDL_CreateTextureFromSurface(game->SMRender, laserShot);
-	gameArt[LCHARGE] = SDL_CreateTextureFromSurface(game->SMRender, laserCharge);
+	SDL_Surface* speedLine = IMG_Load("speedLine.png");
+	playerArt[PLAYER] = SDL_CreateTextureFromSurface(game->SMRender, spaceship);
+	playerArt[PLEFT] = SDL_CreateTextureFromSurface(game->SMRender, shipLeft);
+	playerArt[PRIGHT] = SDL_CreateTextureFromSurface(game->SMRender, shipRight);
+	playerArt[PDAMAGED] = SDL_CreateTextureFromSurface(game->SMRender, shipDam);
+	playerArt[LSHOT] = SDL_CreateTextureFromSurface(game->SMRender, laserShot);
+	playerArt[LCHARGE] = SDL_CreateTextureFromSurface(game->SMRender, laserCharge);
+	playerArt[SPEED_LINE] = SDL_CreateTextureFromSurface(game->SMRender, speedLine);
 	SDL_FreeSurface(spaceship);
 	SDL_FreeSurface(shipLeft);
 	SDL_FreeSurface(shipRight);
@@ -103,7 +105,7 @@ void PlayState::Draw(StateManager* game) {
 	if (BG1Begin >= SCREEN_HEIGHT) BG1Begin = -BG_HEIGHT;
 	if (BG2Begin >= SCREEN_HEIGHT) BG2Begin = -BG_HEIGHT;
 	BG1Begin += SCROLL_SPEED; BG2Begin += SCROLL_SPEED;
-	person.Draw(gameArt, game->SMRender);
+	person.Draw(playerArt, game->SMRender);
 	renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
 	renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);
 	renderTexture(gameText[SCORE], game->SMRender, 15, ARCADE_FONTSZ);

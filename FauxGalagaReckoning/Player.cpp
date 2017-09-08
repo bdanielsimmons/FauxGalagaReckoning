@@ -50,7 +50,7 @@ void Player::Update(const Uint8* keys) {
 		if (keys[SDL_SCANCODE_SPACE]) {
 			now = SDL_GetTicks();
 			if (now > timepass + 50) {
-				Projectile::createProjectile(x + w / 2 - LSR_W / 2, y - LSR_H / 2, LSR_W, LSR_H);
+				Projectile::createProjectile(x + (w - LSR_W / 2), y - LSR_H / 2, LSR_W, LSR_H);
 				//takeDamage(10);
 				PlayState::increaseScore(10);
 			}
@@ -72,5 +72,9 @@ void Player::Update(const Uint8* keys) {
 void Player::Draw(SDL_Texture** ship, SDL_Renderer* ren) {
 	SDL_SetRenderDrawColor(ren, 94, 63, 107, 255);
 	renderTexture(ship[state], ren, x, y);
+	//CHANGE DIST TO ACCOUNT FOR NEW SPDLINE SIZE
+	renderTexture(ship[SPEED_LINE], ren, x + (w - SPDLINE_W / 2), y + h - 10);
+	renderTexture(ship[SPEED_LINE], ren, x, y + h - 10);
+	renderTexture(ship[SPEED_LINE], ren, x + (w / 2) - SPDLINE_W/2, y + h);
 	Projectile::Draw(ship, ren, x, y);
 }
