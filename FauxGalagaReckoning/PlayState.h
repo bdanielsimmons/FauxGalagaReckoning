@@ -15,7 +15,8 @@ class PlayState : public State
 private:
 	static PlayState ActivePlayState;
 	SDL_Texture **background,**gameArt, **gameText;
-	int BG1Begin, BG2Begin, gameScore, gameLives;
+	int BG1Begin, BG2Begin, gameLives;
+	static int gameScore;
 	TTF_Font** usedFonts;
 	SDL_Surface** message;
 public:
@@ -30,6 +31,7 @@ public:
 	void Update(StateManager* game);
 	void Draw(StateManager* game);
 	void renderHPBar(StateManager* game, int, int, int, int, float, SDL_Color, SDL_Color);
+	static void increaseScore(int);
 
 	static PlayState* Instance() {
 		return &ActivePlayState;

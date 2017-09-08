@@ -51,7 +51,8 @@ void Player::Update(const Uint8* keys) {
 			now = SDL_GetTicks();
 			if (now > timepass + 50) {
 				Projectile::createProjectile(x + w / 2 - LSR_W / 2, y - LSR_H / 2, LSR_W, LSR_H);
-				takeDamage(10);
+				//takeDamage(10);
+				PlayState::increaseScore(10);
 			}
 			timepass = now;
 		}
@@ -71,5 +72,5 @@ void Player::Update(const Uint8* keys) {
 void Player::Draw(SDL_Texture** ship, SDL_Renderer* ren) {
 	SDL_SetRenderDrawColor(ren, 94, 63, 107, 255);
 	renderTexture(ship[state], ren, x, y);
-	Projectile::Draw(ship, ren);
+	Projectile::Draw(ship, ren, x, y);
 }

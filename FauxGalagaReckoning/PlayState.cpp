@@ -3,6 +3,7 @@
 SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 PlayState PlayState::ActivePlayState;
 Player person((SCREEN_WIDTH - PLAYER_WIDTH) / 2, SCREEN_HEIGHT - PLAYER_HEIGHT);
+int PlayState::gameScore;
 
 void PlayState::Init(StateManager* game) {
 	gameScore = 0;
@@ -38,7 +39,9 @@ void PlayState::Init(StateManager* game) {
 	SDL_FreeSurface(bgcolor);
 	SDL_FreeSurface(message[HEALTH]);
 	SDL_FreeSurface(message[SCORE]);
+	SDL_FreeSurface(message[SCORE_TEXT]);
 	SDL_FreeSurface(message[LIVES]);
+	SDL_FreeSurface(message[LIVES_TEXT]);
 
 
 	SDL_Surface* spaceship = IMG_Load("player.png");
@@ -74,6 +77,14 @@ void PlayState::Update(StateManager* game) {
 	person.Update(keys);
 	Uint32 now_ms = SDL_GetTicks();
 
+	SDL_Color gameTextColor = { 255,255,255,255 };
+
+	message[SCORE_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameScore).c_str(), gameTextColor);
+	message[LIVES_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameLives).c_str(), gameTextColor);
+	gameText[SCORE_TEXT] = SDL_CreateTextureFromSurface(game->SMRender, message[SCORE_TEXT]);
+	gameText[LIVES_TEXT] = SDL_CreateTextureFromSurface(game->SMRender, message[LIVES_TEXT]);
+	SDL_FreeSurface(message[SCORE_TEXT]);
+	SDL_FreeSurface(message[LIVES_TEXT]);
 
 	SDL_PollEvent(game->Happening());
 	if (game->Event.type == SDL_KEYDOWN) {
@@ -103,10 +114,10 @@ void PlayState::Draw(StateManager* game) {
 	SDL_Delay(1);
 }
 
-SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	SDL_Color col = { r,g,b,a };
-	return col;
+void PlayState::increaseScore(int points) {
+	gameScore += points;
 }
+
 void PlayState::renderHPBar(StateManager* game, int x, int y, int w, int h, float Percent, SDL_Color FGColor, SDL_Color BGColor) {
 	Percent = Percent > 1.f ? 1.f : Percent < 0.f ? 0.f : Percent;
 	SDL_Color old;
@@ -139,4 +150,9 @@ SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren) {
 	texture = SDL_CreateTextureFromSurface(ren, loadedImage);
 	SDL_FreeSurface(loadedImage);
 	return texture;
+}
+
+SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+	SDL_Color col = { r,g,b,a };
+	return col;
 }

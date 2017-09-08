@@ -17,7 +17,7 @@ public:
 		this->h = h;
 	}
 	static void createProjectile(int, int, int, int);
-	static void Draw(SDL_Texture**, SDL_Renderer* ren);
+	static void Draw(SDL_Texture**, SDL_Renderer* ren, int, int);
 	static void Update();
 
 };
