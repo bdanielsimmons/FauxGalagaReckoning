@@ -19,14 +19,12 @@ void Projectile::Draw(SDL_Texture** ammo, SDL_Renderer* ren, int shipX, int ship
 		//rect.w = p.w;
 		//rect.h = p.h;
 		//SDL_RenderFillRect(ren, &rect);
-		if (p.drawn) {
-			renderTexture(ammo[LSHOT], ren, p.x, p.y);
-			if (shipY - p.y < CHARGE_DIST) {
-				renderTexture(ammo[LCHARGE], ren, shipX + PLAYER_WIDTH / 2 - LSR_CHARGEW / 2, shipY - LSR_CHARGEH / 2);
-			}
+		renderTexture(ammo[LSHOT], ren, p.x, p.y);
+		if (shipY - p.y < CHARGE_DIST) {
+			renderTexture(ammo[LCHARGE], ren, shipX + PLAYER_WIDTH / 2 - LSR_CHARGEW / 2, shipY - LSR_CHARGEH / 2);
 		}
 	}
-	
+
 }
 
 void Projectile::Update() {

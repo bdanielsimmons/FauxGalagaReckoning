@@ -116,7 +116,7 @@ void PlayState::Draw(StateManager* game) {
 	BG1Begin += SCROLL_SPEED; BG2Begin += SCROLL_SPEED;
 	now = SDL_GetTicks();
 	if (now > timepass + ((rand() % 51)) + 14) {
-		Enemy::createEnemy((rand() % ((SCREEN_HEIGHT - 100) - 150) + 100),0, SPCENEMY_W, SPCENEMY_W );
+		Enemy::createEnemy(rand() % (SCREEN_WIDTH - SPCENEMY_W), -SPCENEMY_H, SPCENEMY_W, SPCENEMY_W );
 	}
 	Enemy::Update();
 	Enemy::Draw(enemyArt, game->SMRender);
