@@ -8,8 +8,8 @@
 
 class Player {
 private:
-	int x, y, w, h, state, now, timepass, dmgnow, dmgpass;
-	int health;
+	static int x, y, w, h, health, state;
+	int now, timepass, dmgnow, dmgpass;
 public:
 	Player(int x, int y, int w = PLAYER_WIDTH, int h = PLAYER_HEIGHT) {
 		this->x = x;
@@ -24,12 +24,12 @@ public:
 	}
 	void Update(const Uint8*);
 	void Draw(SDL_Texture**, SDL_Renderer*);
-	void takeDamage(int);
-	int getHealth();
-	int getX();
-	int getY();
-	int getW();
-	int getH();
+	static void takeDamage(int);
+	static int getHealth();
+	static int getX();
+	static int getY();
+	static int getW();
+	static int getH();
 };
 
 #endif

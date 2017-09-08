@@ -1,19 +1,28 @@
 #include "Player.h"
 
-//int Player::health;
+int Player::health;
+int Player::x;
+int Player::state;
+int Player::w;
+int Player::y;
+int Player::h;
 
 int Player::getHealth() {
 	return health;
 }
+
 int Player::getX() {
 	return x;
 }
+
 int Player::getY() {
 	return y;
 }
+
 int Player::getW() {
 	return w;
 }
+
 int Player::getH() {
 	return h;
 }
@@ -50,13 +59,11 @@ void Player::Update(const Uint8* keys) {
 		if (keys[SDL_SCANCODE_SPACE]) {
 			now = SDL_GetTicks();
 			if (now > timepass + 50) {
-				Projectile::createProjectile(x + (w - LSR_W / 2), y - LSR_H / 2, LSR_W, LSR_H);
-				//takeDamage(10);
-				PlayState::increaseScore(10);
+				Projectile::createProjectile(x + (w - LSR_W) / 2, y - LSR_H / 2, LSR_W, LSR_H);
 			}
 			timepass = now;
 		}
-		if (!(keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) && state != PDAMAGED) {
+		if (!(keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT])) {
 			state = PLAYER;
 		}
 	}
@@ -73,8 +80,9 @@ void Player::Draw(SDL_Texture** ship, SDL_Renderer* ren) {
 	SDL_SetRenderDrawColor(ren, 94, 63, 107, 255);
 	renderTexture(ship[state], ren, x, y);
 	//CHANGE DIST TO ACCOUNT FOR NEW SPDLINE SIZE
-	renderTexture(ship[SPEED_LINE], ren, x + (w - SPDLINE_W / 2), y + h - 10);
+	//CHOICE: KEEP SPEEDLINES?
+	/*renderTexture(ship[SPEED_LINE], ren, x + (w - SPDLINE_W / 2), y + h - 10);
 	renderTexture(ship[SPEED_LINE], ren, x, y + h - 10);
-	renderTexture(ship[SPEED_LINE], ren, x + (w / 2) - SPDLINE_W/2, y + h);
+	renderTexture(ship[SPEED_LINE], ren, x + (w / 2) - SPDLINE_W/2, y + h);*/
 	Projectile::Draw(ship, ren, x, y);
 }

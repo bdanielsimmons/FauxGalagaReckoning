@@ -24,9 +24,11 @@ void PlayState::Init(StateManager* game) {
 	//loadTexture("test.bmp", game->SMRender);
 	SDL_Texture** baseArt = new SDL_Texture*[NUM_PLYRART];
 	SDL_Texture** baseTxt = new SDL_Texture*[NUM_TXT];
+	SDL_Texture** killArt = new SDL_Texture*[NUM_ENEMYART];
 	background = bg;
 	playerArt = baseArt;
 	gameText = baseTxt;
+	enemyArt = killArt;
 
 	SDL_Surface* bgcolor = IMG_Load("starBackgroundLarge.png");
 	background[SCROLL1] = SDL_CreateTextureFromSurface(game->SMRender, bgcolor);
@@ -64,6 +66,13 @@ void PlayState::Init(StateManager* game) {
 	SDL_FreeSurface(shipDam);
 	SDL_FreeSurface(laserShot);
 	SDL_FreeSurface(laserCharge);
+
+	SDL_Surface* enemyShip = IMG_Load("enemyShip.png");
+	SDL_Surface* enemyUFO = IMG_Load("enemyUFO.png");
+	enemyArt[MAIN_SHIP] = SDL_CreateTextureFromSurface(game->SMRender, enemyShip);
+	enemyArt[UFO] = SDL_CreateTextureFromSurface(game->SMRender, enemyUFO);
+	SDL_FreeSurface(enemyShip);
+	SDL_FreeSurface(enemyUFO);
 
 
 	BG1Begin = 0;
@@ -105,6 +114,13 @@ void PlayState::Draw(StateManager* game) {
 	if (BG1Begin >= SCREEN_HEIGHT) BG1Begin = -BG_HEIGHT;
 	if (BG2Begin >= SCREEN_HEIGHT) BG2Begin = -BG_HEIGHT;
 	BG1Begin += SCROLL_SPEED; BG2Begin += SCROLL_SPEED;
+	now = SDL_GetTicks();
+	if (now > timepass + ((rand() % 51)) + 14) {
+		Enemy::createEnemy((rand() % ((SCREEN_HEIGHT - 100) - 150) + 100),0, SPCENEMY_W, SPCENEMY_W );
+	}
+	Enemy::Update();
+	Enemy::Draw(enemyArt, game->SMRender);
+	timepass = now;
 	person.Draw(playerArt, game->SMRender);
 	renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
 	renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);

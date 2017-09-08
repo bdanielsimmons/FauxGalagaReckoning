@@ -37,6 +37,12 @@
     <Filter Include="Source Files\States\MainGame\Player\Projectile">
       <UniqueIdentifier>{299e0482-9ac7-4dd4-8e06-6a89d7a4a162}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\States\MainGame\Enemy">
+      <UniqueIdentifier>{033d64c0-a889-48ad-89e0-dde584e83147}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\MainGame\Enemy\EnemyProjectile">
+      <UniqueIdentifier>{a9bb5ce9-7d87-48b4-8341-5f1434968693}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainGame.cpp">
@@ -56,6 +62,15 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Source Files\States\MainGame\Player\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyProjectile.cpp">
+      <Filter>Source Files\States\MainGame\Enemy\EnemyProjectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\States\MainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Source Files\States\MainGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +93,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
