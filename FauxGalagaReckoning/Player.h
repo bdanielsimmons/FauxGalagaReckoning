@@ -22,9 +22,10 @@ public:
 		health = 100;
 		state = 0;
 	}
-	void Update(const Uint8*);
+	void Update(const Uint8*, Mix_Chunk*[]);
 	void Draw(SDL_Texture**, SDL_Renderer*);
 	static void takeDamage(int);
+	static void resetStats();
 	static int getHealth();
 	static int getX();
 	static int getY();

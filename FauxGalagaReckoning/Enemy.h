@@ -19,7 +19,7 @@ public:
 	}
 	static void createEnemy(int, int, int, int);
 	static void Draw(SDL_Texture**, SDL_Renderer*);
-	static void Update();
+	static void Update(Mix_Chunk*[]);
 
 };
 

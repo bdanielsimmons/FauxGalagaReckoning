@@ -1,8 +1,8 @@
 #include "Player.h"
 
 int Player::health;
-int Player::x;
 int Player::state;
+int Player::x;
 int Player::w;
 int Player::y;
 int Player::h;
@@ -32,7 +32,14 @@ void Player::takeDamage(int dmg) {
 	state = PDAMAGED;
 }
 
-void Player::Update(const Uint8* keys) {
+void Player::resetStats() {
+	health = MAX_HEALTH;
+	state = PLAYER;
+	x = (SCREEN_WIDTH - PLAYER_WIDTH) / 2;
+	y = SCREEN_HEIGHT - PLAYER_HEIGHT;
+}
+
+void Player::Update(const Uint8* keys, Mix_Chunk* effects[]) {
 	if (state == PDAMAGED) {
 		dmgnow = SDL_GetTicks();
 	}
@@ -60,6 +67,8 @@ void Player::Update(const Uint8* keys) {
 			now = SDL_GetTicks();
 			if (now > timepass + 50) {
 				Projectile::createProjectile(x + (w - LSR_W) / 2, y - LSR_H / 2, LSR_W, LSR_H);
+				Mix_VolumeChunk(effects[LASER], MIX_MAX_VOLUME / 4);
+				Mix_PlayChannel(-1, effects[LASER], 0);
 			}
 			timepass = now;
 		}

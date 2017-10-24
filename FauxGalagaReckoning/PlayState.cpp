@@ -7,18 +7,28 @@ int PlayState::gameScore;
 
 void PlayState::Init(StateManager* game) {
 	gameScore = 0;
-	gameLives = 3;
+	gameLives = GAME_LIVES;
+	deathCounter = DEATH_COUNTER;
+	gameEffects = new Mix_Chunk*[NUM_FX];
+	gameMusic = new Mix_Music*[NUM_MUSIC];
+
 	usedFonts = new TTF_Font*[NUM_FONT];
 	usedFonts[ARCADE] = TTF_OpenFont("arcade.ttf", ARCADE_FONTSZ);
-	SDL_Color gameTextColor = { 255,255,255,255 };
-
+	usedFonts[ARCADE_LARGE] = TTF_OpenFont("arcade.ttf", ARCADE_FONTSZ * 3);
+	gameTextColor = { 255,255,255,255 };
 	message = new SDL_Surface*[NUM_TXT];
 	message[HEALTH] = TTF_RenderText_Solid(usedFonts[ARCADE], "HEALTH", gameTextColor);
 	message[SCORE] = TTF_RenderText_Solid(usedFonts[ARCADE], "SCORE", gameTextColor);
 	message[SCORE_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameScore).c_str(), gameTextColor);
 	message[LIVES] = TTF_RenderText_Solid(usedFonts[ARCADE], "LIVES", gameTextColor);
 	message[LIVES_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameLives).c_str(), gameTextColor);
+	message[GAME_OVER] = TTF_RenderText_Solid(usedFonts[ARCADE_LARGE], "GAME OVER", gameTextColor);
+	message[RETRY] = TTF_RenderText_Solid(usedFonts[ARCADE_LARGE], "TRY AGAIN", gameTextColor);
 
+	gameEffects[LASER] = Mix_LoadWAV("laser.wav");
+	gameEffects[COLLISION] = Mix_LoadWAV("blast.mp3");
+	gameMusic[DEATH] = Mix_LoadMUS("death.ogg");
+	gameMusic[SPACE_GUNNER] = Mix_LoadMUS("battle.wav");
 	SDL_Texture** bg = new SDL_Texture*[NUM_BCKGRND];
 	//Insert failsafe before assigning background!
 	//loadTexture("test.bmp", game->SMRender);
@@ -38,12 +48,16 @@ void PlayState::Init(StateManager* game) {
 	gameText[SCORE_TEXT] = SDL_CreateTextureFromSurface(game->SMRender, message[SCORE_TEXT]);
 	gameText[LIVES] = SDL_CreateTextureFromSurface(game->SMRender, message[LIVES]);
 	gameText[LIVES_TEXT] = SDL_CreateTextureFromSurface(game->SMRender, message[LIVES_TEXT]);
+	gameText[GAME_OVER] = SDL_CreateTextureFromSurface(game->SMRender, message[GAME_OVER]);
+	gameText[RETRY] = SDL_CreateTextureFromSurface(game->SMRender, message[RETRY]);
 	SDL_FreeSurface(bgcolor);
 	SDL_FreeSurface(message[HEALTH]);
 	SDL_FreeSurface(message[SCORE]);
 	SDL_FreeSurface(message[SCORE_TEXT]);
 	SDL_FreeSurface(message[LIVES]);
 	SDL_FreeSurface(message[LIVES_TEXT]);
+	SDL_FreeSurface(message[GAME_OVER]);
+	SDL_FreeSurface(message[RETRY]);
 
 
 	SDL_Surface* spaceship = IMG_Load("player.png");
@@ -74,9 +88,21 @@ void PlayState::Init(StateManager* game) {
 	SDL_FreeSurface(enemyShip);
 	SDL_FreeSurface(enemyUFO);
 
-
 	BG1Begin = 0;
 	BG2Begin = BG_HEIGHT;
+
+	Mix_PlayMusic(gameMusic[SPACE_GUNNER], -1);
+}
+
+void PlayState::reInit(StateManager* game) {
+	if (gameLives - 1 < 0) {
+		game->Quit();
+	}
+	gameScore = 0;
+	gameLives -= 1;
+	deathCounter = DEATH_COUNTER;
+	Mix_PlayMusic(gameMusic[SPACE_GUNNER], -1);
+	Enemy::Enemies.clear();
 }
 
 void PlayState::Clear() {
@@ -84,11 +110,27 @@ void PlayState::Clear() {
 }
 
 void PlayState::Update(StateManager* game) {
-	auto keys = SDL_GetKeyboardState(NULL);
-	person.Update(keys);
-	Uint32 now_ms = SDL_GetTicks();
 
-	SDL_Color gameTextColor = { 255,255,255,255 };
+	if (person.getHealth() <= 0 && deathCounter >= 0) {
+		if (gameLives - 1 < 0 && deathCounter == DEATH_COUNTER) {
+			Mix_PlayMusic(gameMusic[DEATH], -1);
+		}
+		else if (deathCounter == DEATH_COUNTER) {
+			Mix_HaltMusic();
+		}
+		deathCounter-=3;
+		return;
+	}
+	else if (deathCounter < 0) {
+			person.resetStats();
+			reInit(game);
+			return;
+	}
+
+	deathCounter = DEATH_COUNTER;
+	auto keys = SDL_GetKeyboardState(NULL);
+	person.Update(keys, gameEffects);
+	Uint32 now_ms = SDL_GetTicks();
 
 	message[SCORE_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameScore).c_str(), gameTextColor);
 	message[LIVES_TEXT] = TTF_RenderText_Solid(usedFonts[ARCADE], std::to_string(gameLives).c_str(), gameTextColor);
@@ -96,6 +138,13 @@ void PlayState::Update(StateManager* game) {
 	gameText[LIVES_TEXT] = SDL_CreateTextureFromSurface(game->SMRender, message[LIVES_TEXT]);
 	SDL_FreeSurface(message[SCORE_TEXT]);
 	SDL_FreeSurface(message[LIVES_TEXT]);
+
+	now = SDL_GetTicks();
+	if (now > timepass + ((rand() % 51)) + 14) {
+		Enemy::createEnemy(rand() % (SCREEN_WIDTH - SPCENEMY_W), -SPCENEMY_H, SPCENEMY_W, SPCENEMY_W);
+	}
+	timepass = now;
+	Enemy::Update(gameEffects);
 
 	SDL_PollEvent(game->Happening());
 	if (game->Event.type == SDL_KEYDOWN) {
@@ -109,25 +158,35 @@ void PlayState::Update(StateManager* game) {
 
 void PlayState::Draw(StateManager* game) {
 	SDL_RenderClear(game->SMRender);
-	renderTexture(background[SCROLL1], game->SMRender, 0, BG1Begin);
-	renderTexture(background[SCROLL2], game->SMRender, 0, BG2Begin);
-	if (BG1Begin >= SCREEN_HEIGHT) BG1Begin = -BG_HEIGHT;
-	if (BG2Begin >= SCREEN_HEIGHT) BG2Begin = -BG_HEIGHT;
-	BG1Begin += SCROLL_SPEED; BG2Begin += SCROLL_SPEED;
-	now = SDL_GetTicks();
-	if (now > timepass + ((rand() % 51)) + 14) {
-		Enemy::createEnemy(rand() % (SCREEN_WIDTH - SPCENEMY_W), -SPCENEMY_H, SPCENEMY_W, SPCENEMY_W );
+	if (person.getHealth() > 0) {
+		renderTexture(background[SCROLL1], game->SMRender, 0, BG1Begin);
+		renderTexture(background[SCROLL2], game->SMRender, 0, BG2Begin);
+		if (BG1Begin >= SCREEN_HEIGHT) BG1Begin = -BG_HEIGHT;
+		if (BG2Begin >= SCREEN_HEIGHT) BG2Begin = -BG_HEIGHT;
+		BG1Begin += SCROLL_SPEED; BG2Begin += SCROLL_SPEED;
+		Enemy::Draw(enemyArt, game->SMRender);
+		person.Draw(playerArt, game->SMRender);
+		renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
+		renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);
+		renderTexture(gameText[SCORE], game->SMRender, 15, ARCADE_FONTSZ);
+		renderTexture(gameText[SCORE_TEXT], game->SMRender, 15, ARCADE_FONTSZ * 2);
+		renderTexture(gameText[LIVES], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ);
+		renderTexture(gameText[LIVES_TEXT], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ * 2);
 	}
-	Enemy::Update();
-	Enemy::Draw(enemyArt, game->SMRender);
-	timepass = now;
-	person.Draw(playerArt, game->SMRender);
-	renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
-	renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);
-	renderTexture(gameText[SCORE], game->SMRender, 15, ARCADE_FONTSZ);
-	renderTexture(gameText[SCORE_TEXT], game->SMRender, 15, ARCADE_FONTSZ * 2);
-	renderTexture(gameText[LIVES], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ);
-	renderTexture(gameText[LIVES_TEXT], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ * 2);
+	else {
+		renderTexture(background[SCROLL1], game->SMRender, 0, BG1Begin);
+		renderTexture(background[SCROLL2], game->SMRender, 0, BG2Begin);
+		Enemy::Draw(enemyArt, game->SMRender);
+		person.Draw(playerArt, game->SMRender);
+		renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
+		renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);
+		renderTexture(gameText[SCORE], game->SMRender, 15, ARCADE_FONTSZ);
+		renderTexture(gameText[SCORE_TEXT], game->SMRender, 15, ARCADE_FONTSZ * 2);
+		renderTexture(gameText[LIVES], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ);
+		renderTexture(gameText[LIVES_TEXT], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ * 2);
+		if (gameLives > 0) { renderTexture(gameText[RETRY], game->SMRender, (SCREEN_WIDTH - (ARCADE_FONTSZ * 3 * 9)) / 2, (SCREEN_HEIGHT - (ARCADE_FONTSZ * 3)) / 2); }
+		else { renderTexture(gameText[GAME_OVER], game->SMRender, (SCREEN_WIDTH - (ARCADE_FONTSZ * 3 * 9)) / 2, (SCREEN_HEIGHT - (ARCADE_FONTSZ * 3)) / 2); };
+	}
 	SDL_RenderPresent(game->SMRender);
 	SDL_Delay(1);
 }

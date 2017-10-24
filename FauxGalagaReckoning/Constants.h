@@ -3,6 +3,10 @@
 
 #include <SDL.h>
 #include <string>
+struct CollisionBox {
+	int x, y, w, h;
+};
+
 const int SCREEN_WIDTH = 600,
 SCREEN_HEIGHT = 750,
 BG_HEIGHT = 750,
@@ -23,11 +27,15 @@ SPDLINE_W = 2,
 SPDLINE_H = 53,
 MAX_HEALTH = 100,
 ARCADE_FONTSZ = 15,
-SCROLL_SPEED = 5;
+SCROLL_SPEED = 5,
+GAME_LIVES = 3,
+DEATH_COUNTER = 1000;
 enum bkgs { SCROLL1, SCROLL2 };
-enum playerText { HEALTH, SCORE, SCORE_TEXT, LIVES, LIVES_TEXT};
-enum gameFont { ARCADE };
+enum playerText { HEALTH, SCORE, SCORE_TEXT, LIVES, LIVES_TEXT, GAME_OVER, RETRY};
+enum gameFont { ARCADE, ARCADE_LARGE };
 enum playerArt { PLAYER, PLEFT, PRIGHT, PDAMAGED, LCHARGE, LSHOT, SPEED_LINE };
 enum enemyArt { MAIN_SHIP, UFO };
+enum gameEffects { LASER, COLLISION };
+enum gameMusic { DEATH, SPACE_GUNNER};
 
 #endif
