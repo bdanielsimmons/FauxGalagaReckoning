@@ -89,7 +89,7 @@ void Player::Draw(SDL_Texture** ship, SDL_Renderer* ren) {
 	SDL_SetRenderDrawColor(ren, 94, 63, 107, 255);
 	renderTexture(ship[state], ren, x, y);
 	//CHANGE DIST TO ACCOUNT FOR NEW SPDLINE SIZE
-	//CHOICE: KEEP SPEEDLINES?
+	//CHOICE: Keep speed lines or not? Currently disabled.
 	/*renderTexture(ship[SPEED_LINE], ren, x + (w - SPDLINE_W / 2), y + h - 10);
 	renderTexture(ship[SPEED_LINE], ren, x, y + h - 10);
 	renderTexture(ship[SPEED_LINE], ren, x + (w / 2) - SPDLINE_W/2, y + h);*/

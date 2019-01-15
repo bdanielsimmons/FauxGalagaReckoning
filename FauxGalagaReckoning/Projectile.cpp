@@ -13,6 +13,7 @@ void Projectile::noDraw(Projectile& bullet) {
 void Projectile::Draw(SDL_Texture** ammo, SDL_Renderer* ren, int shipX, int shipY) {
 	SDL_SetRenderDrawColor(ren, 255, 255, 0, 255);
 	for (Projectile &p : Bullets) {
+		//This is for when there is no art present
 		//SDL_Rect rect;
 		//rect.x = p.x;
 		//rect.y = p.y;
@@ -38,4 +39,22 @@ void Projectile::Update() {
 		}
 	}
 	Bullets = present;
+
+	////(todo - dasim) I indeed broke this just now
+	//std::vector<Projectile>::iterator p = Bullets.begin();
+	////while (p != Bullets.end()) {
+
+	////}
+	//for (p; p != Bullets.end(); ++p) {
+	//	if ((*p).drawn && (*p).y - LSR_SPEED > -LSR_H) {
+	//		(*p).y -= LSR_SPEED;
+	//	}
+	//	else {
+	//		p = Bullets.erase(p);
+	//		if (p != Bullets.begin()) {
+	//			p = std::prev(p);
+	//			continue;
+	//		}
+	//	}
+	//}
 }

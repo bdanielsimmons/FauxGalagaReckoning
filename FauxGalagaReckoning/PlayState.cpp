@@ -73,7 +73,8 @@ void PlayState::Init(StateManager* game) {
 	playerArt[PDAMAGED] = SDL_CreateTextureFromSurface(game->SMRender, shipDam);
 	playerArt[LSHOT] = SDL_CreateTextureFromSurface(game->SMRender, laserShot);
 	playerArt[LCHARGE] = SDL_CreateTextureFromSurface(game->SMRender, laserCharge);
-	playerArt[SPEED_LINE] = SDL_CreateTextureFromSurface(game->SMRender, speedLine);
+	//SPEED_LINE disabled;
+	//playerArt[SPEED_LINE] = SDL_CreateTextureFromSurface(game->SMRender, speedLine);
 	SDL_FreeSurface(spaceship);
 	SDL_FreeSurface(shipLeft);
 	SDL_FreeSurface(shipRight);
@@ -128,7 +129,7 @@ void PlayState::Update(StateManager* game) {
 	}
 
 	deathCounter = DEATH_COUNTER;
-	auto keys = SDL_GetKeyboardState(NULL);
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
 	person.Update(keys, gameEffects);
 	Uint32 now_ms = SDL_GetTicks();
 
@@ -159,19 +160,30 @@ void PlayState::Update(StateManager* game) {
 void PlayState::Draw(StateManager* game) {
 	SDL_RenderClear(game->SMRender);
 	if (person.getHealth() > 0) {
+
+		//Parallax Background
 		renderTexture(background[SCROLL1], game->SMRender, 0, BG1Begin);
 		renderTexture(background[SCROLL2], game->SMRender, 0, BG2Begin);
 		if (BG1Begin >= SCREEN_HEIGHT) BG1Begin = -BG_HEIGHT;
 		if (BG2Begin >= SCREEN_HEIGHT) BG2Begin = -BG_HEIGHT;
 		BG1Begin += SCROLL_SPEED; BG2Begin += SCROLL_SPEED;
+		
+		//Draw all enemies
 		Enemy::Draw(enemyArt, game->SMRender);
+		
+		//Draw the player
 		person.Draw(playerArt, game->SMRender);
+
+		//Draw the HUD info and text last
 		renderHPBar(game, 115, SCREEN_HEIGHT - 50, -100, 40, (person.getHealth()) / static_cast<float>(MAX_HEALTH), color(255, 255, 0, 255), color(255, 0, 0, 255));
 		renderTexture(gameText[HEALTH], game->SMRender, 15, SCREEN_HEIGHT - 60 - ARCADE_FONTSZ);
 		renderTexture(gameText[SCORE], game->SMRender, 15, ARCADE_FONTSZ);
 		renderTexture(gameText[SCORE_TEXT], game->SMRender, 15, ARCADE_FONTSZ * 2);
 		renderTexture(gameText[LIVES], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ);
 		renderTexture(gameText[LIVES_TEXT], game->SMRender, SCREEN_WIDTH - 15 - (5 * ARCADE_FONTSZ), ARCADE_FONTSZ * 2);
+		//Once used, don't forget to destroy wasted texture or memory leak occurs.
+		SDL_DestroyTexture(gameText[SCORE_TEXT]);
+		SDL_DestroyTexture(gameText[LIVES_TEXT]);
 	}
 	else {
 		renderTexture(background[SCROLL1], game->SMRender, 0, BG1Begin);

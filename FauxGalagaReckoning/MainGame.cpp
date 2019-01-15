@@ -1,5 +1,4 @@
 // Tetris.cpp : Defines the entry point for the console application.
-//
 #include <string>
 #include <iostream>
 #include <SDL_image.h>
@@ -13,7 +12,7 @@
 #undef main
 
 int main(int, char**) {
-	srand(time(0));
+	//srand(time(0));
 	SDL_Init(SDL_INIT_EVERYTHING);
 	Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
 	TTF_Init();

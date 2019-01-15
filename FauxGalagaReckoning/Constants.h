@@ -7,8 +7,8 @@ struct CollisionBox {
 	int x, y, w, h;
 };
 
-const int SCREEN_WIDTH = 600,
-SCREEN_HEIGHT = 750,
+const int SCREEN_WIDTH = 400,
+SCREEN_HEIGHT = 500,
 BG_HEIGHT = 750,
 PLAYER_VEL = 8,
 PLAYER_WIDTH = 50,

@@ -74,5 +74,6 @@ void Enemy::Update(Mix_Chunk* effects[]) {
 			present.push_back(a);
 		}
 	}
+	Enemies.clear();
 	Enemies = present;
 }
